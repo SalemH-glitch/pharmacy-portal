@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RxTools — Pharmacy Portal</title>
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body data-page="login">
+
+  <main class="login-wrap">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="login-brand-badge">Rx</div>
+        <h1>RxTools Pharmacy Suite</h1>
+        <p>Dextrose · Dilution · PK/TDM Calculators</p>
+      </div>
+
+      <div id="login-form" class="auth-form">
+        <h2>Sign In</h2>
+        <div id="login-error" class="auth-error hidden"></div>
+        <div class="field-group">
+          <label class="field-label" for="login-email">Email</label>
+          <input class="field-input" type="email" id="login-email" placeholder="you@hospital.com" autocomplete="email">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="login-password">Password</label>
+          <input class="field-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="auth-btn" id="login-btn">Sign In</button>
+        <p class="auth-switch">No account? <a href="#" id="to-register">Create one</a></p>
+      </div>
+
+      <div id="register-form" class="auth-form hidden">
+        <h2>Create Account</h2>
+        <div id="register-error" class="auth-error hidden"></div>
+        <div class="field-group">
+          <label class="field-label" for="reg-name">Full Name</label>
+          <input class="field-input" type="text" id="reg-name" placeholder="Dr. Your Name" autocomplete="name">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="reg-email">Email</label>
+          <input class="field-input" type="email" id="reg-email" placeholder="you@hospital.com" autocomplete="email">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="reg-password">Password</label>
+          <input class="field-input" type="password" id="reg-password" placeholder="Minimum 6 characters" autocomplete="new-password">
+        </div>
+        <button class="auth-btn" id="register-btn">Create Account</button>
+        <p class="auth-switch">Have an account? <a href="#" id="to-login">Sign in</a></p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="login-footer">RxTools — For licensed pharmacy professionals only</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="portal.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patients — RxTools</title>
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body data-page="patients">
+
+  <nav class="portal-nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="dashboard.html">
+        <div class="nav-brand-icon">Rx</div>
+        RxTools
+      </a>
+      <div class="nav-links">
+        <a href="patients.html" class="nav-link active">Patients</a>
+        <span class="nav-sep">|</span>
+        <span class="nav-user" id="nav-user"></span>
+        <button class="nav-signout" id="nav-signout">Sign Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="portal-main">
+    <div class="portal-container">
+
+      <div class="page-header">
+        <h1 class="page-title">Patients</h1>
+        <button class="btn-primary" id="new-patient-btn">+ New Patient</button>
+      </div>
+
+      <div class="search-bar">
+        <input class="search-input" type="text" id="patient-search" placeholder="Search by name or PT-XXXXX...">
+      </div>
+
+      <div class="table-card" id="patients-list">
+        <div class="loading-state">Loading patients...</div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="portal-footer">RxTools — For licensed pharmacy professionals only</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="portal.js"></script>
+</body>
+</html>
