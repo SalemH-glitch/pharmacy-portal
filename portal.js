@@ -12,25 +12,52 @@ const sb = supabase.createClient(SB_URL, SB_KEY);
 
 const TOOLS = [
   {
-    name: 'Dextrose Calculator',
-    desc: 'Mixing modes for TPN, pediatric fluids, and NICU dextrose preparation.',
-    url:  'https://salemh-glitch.github.io/dextrose-reconstitution-calculator/',
+    name:  'Dextrose Calculator',
+    desc:  'Prepare precise dextrose IV solutions for TPN, pediatric fluids, and NICU use.',
+    url:   'https://salemh-glitch.github.io/dextrose-reconstitution-calculator/',
     color: '#1565C0',
-    abbr: 'Dx',
+    abbr:  'Dx',
+    guide: {
+      summary: 'Calculates exact volumes needed to mix a dextrose solution to a target concentration.',
+      steps: [
+        '<strong>Pick a mode:</strong> <em>Stock → Target</em> to dilute a concentrated dextrose stock, <em>Mix Two Solutions</em> to blend two different concentrations, or <em>Dextrose + Saline</em> to combine with NS.',
+        '<strong>Enter your values:</strong> starting concentration(s), target concentration, and final volume.',
+        '<strong>Read the result:</strong> the calculator tells you exactly how many mL of each solution to draw up.',
+        '<strong>Link a patient</strong> using the search bar at the top to save the calculation to their record.',
+      ],
+    },
   },
   {
-    name: 'Dilution Calculator',
-    desc: 'C₁V₁=C₂V₂ dilution calculator with 76 pre-loaded medications and diluents.',
-    url:  'https://pharmacy-dilution-calculator.onrender.com/',
+    name:  'Dilution Calculator',
+    desc:  'C₁V₁=C₂V₂ dilution calculator with 76 pre-loaded medications and built-in safety checks.',
+    url:   'https://pharmacy-dilution-calculator.onrender.com/',
     color: '#2E7D32',
-    abbr: 'Di',
+    abbr:  'Di',
+    guide: {
+      summary: 'Calculates IV medication dilutions with concentration safety validation and a full pharmacist audit trail.',
+      steps: [
+        '<strong>Select a drug</strong> from 76 pre-loaded medications (with known concentration limits) or type one in manually.',
+        '<strong>Choose your diluent</strong> (NS, D5W, etc.) and enter your starting concentration, target concentration, and final volume.',
+        '<strong>Review safety flags:</strong> the calculator warns you if a concentration falls outside standard safe ranges.',
+        '<strong>Sign and submit:</strong> confirm responsibility with a pharmacist signature — the calculation is saved with a timestamped audit trail.',
+      ],
+    },
   },
   {
-    name: 'PK / TDM Calculator',
-    desc: 'Pharmacokinetic and therapeutic drug monitoring calculations from serum levels.',
-    url:  'https://salemh-glitch.github.io/pk-tdm-calculator/',
+    name:  'PK / TDM Calculator',
+    desc:  'Individualize drug dosing using real patient serum levels and pharmacokinetic modelling.',
+    url:   'https://salemh-glitch.github.io/pk-tdm-calculator/',
     color: '#6A1B9A',
-    abbr: 'PK',
+    abbr:  'PK',
+    guide: {
+      summary: 'Uses one or two serum drug levels from your patient to calculate their individual PK parameters and recommend a dose.',
+      steps: [
+        '<strong>Enter the regimen:</strong> current dose, infusion duration, and how often the drug is given (e.g. q12h).',
+        '<strong>Add serum levels:</strong> input the measured drug concentration(s) and the exact time each was drawn relative to the infusion.',
+        '<strong>Review PK parameters:</strong> the calculator derives that patient\'s individual half-life, clearance, and volume of distribution.',
+        '<strong>Get a recommendation:</strong> enter your target trough or AUC and the tool suggests a new dose and interval.',
+      ],
+    },
   },
 ];
 
@@ -439,7 +466,16 @@ async function initDashboard() {
         <div class="tool-card-icon" style="background:${t.color}18;color:${t.color}">${t.abbr}</div>
         <h3 class="tool-card-name">${t.name}</h3>
         <p class="tool-card-desc">${t.desc}</p>
-        <button class="tool-card-btn" style="background:${t.color}" onclick="openTool('${t.url}')">Open Tool →</button>
+        <div class="tool-card-actions">
+          <button class="tool-card-btn" style="background:${t.color}" onclick="openTool('${t.url}')">Open Tool →</button>
+          <button class="tool-guide-toggle" onclick="this.closest('.tool-card').querySelector('.tool-guide').classList.toggle('open');this.classList.toggle('open')">How it works</button>
+        </div>
+        <div class="tool-guide">
+          <p class="tool-guide-summary">${t.guide.summary}</p>
+          <ol class="tool-guide-steps">
+            ${t.guide.steps.map(s => `<li>${s}</li>`).join('')}
+          </ol>
+        </div>
       </div>`).join('');
   }
 
