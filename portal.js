@@ -15,7 +15,7 @@ const TOOLS = [
   {
     name: 'Dilution Calculator',
     desc: 'C₁V₁=C₂V₂ dilution calculator with 76 pre-loaded medications and diluents.',
-    url:  'https://salemh-glitch.github.io/pharmacy-dilution-calculator/',
+    url:  'https://pharmacy-dilution-calculator.onrender.com/',
     color: '#2E7D32',
     abbr: 'Di',
   },
