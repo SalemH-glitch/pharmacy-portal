@@ -398,6 +398,30 @@ function initLoginPage() {
   });
 }
 
+// ── Tool Navigation ──────────────────────────────────────────────────────
+
+async function openTool(url) {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = url; return; }
+
+  // Same origin (GitHub Pages) — localStorage is shared, just navigate
+  if (url.includes('salemh-glitch.github.io')) {
+    window.location.href = url;
+    return;
+  }
+
+  // Cross-origin — embed session tokens in URL hash so rx-bar can pick them up
+  const expiresIn = Math.max(0, Math.floor((session.expires_at * 1000 - Date.now()) / 1000));
+  const hash = [
+    'access_token='  + encodeURIComponent(session.access_token),
+    'refresh_token=' + encodeURIComponent(session.refresh_token),
+    'expires_in='    + expiresIn,
+    'token_type=bearer',
+    'type=portal_sso',
+  ].join('&');
+  window.location.href = url + '#' + hash;
+}
+
 // ── Page: Dashboard ───────────────────────────────────────────────────────
 
 async function initDashboard() {
@@ -415,7 +439,7 @@ async function initDashboard() {
         <div class="tool-card-icon" style="background:${t.color}18;color:${t.color}">${t.abbr}</div>
         <h3 class="tool-card-name">${t.name}</h3>
         <p class="tool-card-desc">${t.desc}</p>
-        <a href="${t.url}" class="tool-card-btn" style="background:${t.color}">Open Tool →</a>
+        <button class="tool-card-btn" style="background:${t.color}" onclick="openTool('${t.url}')">Open Tool →</button>
       </div>`).join('');
   }
 
