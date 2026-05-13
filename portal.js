@@ -1,5 +1,11 @@
 'use strict';
 
+// Apply saved theme before first paint (prevents flash)
+(function(){
+  var t = localStorage.getItem('rxtools-theme');
+  if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+})();
+
 const SB_URL = 'https://nqxtbjrpddzgkfsdsywg.supabase.co';
 const SB_KEY = 'sb_publishable_OZbSJoNrKxXuOrWdkg_icA_ydRvwYGV';
 const sb = supabase.createClient(SB_URL, SB_KEY);
@@ -608,9 +614,36 @@ async function loadPatientCalcs(patientDbId) {
     </table>`;
 }
 
+// ── Theme Toggle ─────────────────────────────────────────────────────────
+
+function initThemeToggle() {
+  const btn = document.getElementById('theme-toggle');
+  if (!btn) return;
+
+  function sync() {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    btn.textContent = dark ? '☀' : '☽';
+    btn.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+  }
+
+  sync();
+  btn.addEventListener('click', () => {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (dark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('rxtools-theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('rxtools-theme', 'dark');
+    }
+    sync();
+  });
+}
+
 // ── Router ────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
+  initThemeToggle();
   const page = document.body.dataset.page;
   if (page === 'login')     initLoginPage();
   if (page === 'dashboard') initDashboard();
