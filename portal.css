@@ -645,6 +645,9 @@ html[data-theme="dark"] .patient-id-large { background: rgba(21,101,192,0.2); co
 html[data-theme="dark"] .data-table tr.clickable-row:hover { background: rgba(21,101,192,0.1); }
 html[data-theme="dark"] .modal-close { background: #374151; color: #9CA3AF; }
 html[data-theme="dark"] .modal-close:hover { background: #4B5563; }
+html[data-theme="dark"] .modal-footer { background: var(--bg); }
+html[data-theme="dark"] .auth-error { background: var(--error-bg); border-color: var(--error-border); }
+html[data-theme="dark"] .tool-guide-toggle { border-color: var(--border); }
 
 /* ── Responsive ── */
 @media (max-width: 700px) {

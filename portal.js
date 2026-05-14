@@ -491,12 +491,16 @@ async function initDashboard() {
 
   // Recent calcs
   const container = document.getElementById('recent-calcs');
-  const { data: calcs } = await sb
+  const { data: calcs, error: calcErr } = await sb
     .from('calculations')
     .select('id, app, type, created_at, inputs, result, user_id, patients(patient_id, first_name, last_name)')
     .order('created_at', { ascending: false })
     .limit(15);
 
+  if (calcErr) {
+    container.innerHTML = '<div class="error-state">Could not load recent calculations.</div>';
+    return;
+  }
   if (!calcs?.length) {
     container.innerHTML = '<div class="empty-state">No calculations yet. Open a tool to get started.</div>';
     return;
@@ -611,8 +615,8 @@ async function initPatientPage() {
 
   document.getElementById('edit-patient-btn')?.addEventListener('click', () =>
     showPatientModal(patient, async () => {
-      const { data: updated } = await sb.from('patients').select('*').eq('patient_id', ptId).single();
-      if (updated) renderPatientCard(updated);
+      const { data: updated, error: fetchErr } = await sb.from('patients').select('*').eq('patient_id', ptId).single();
+      if (!fetchErr && updated) renderPatientCard(updated);
     })
   );
 }
