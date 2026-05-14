@@ -364,17 +364,22 @@ function initLoginPage() {
     btn.textContent = 'Signing in…';
     btn.disabled = true;
 
-    const { error } = await sb.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      showError(errEl, error.message);
+    try {
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      if (error) {
+        showError(errEl, error.message === 'Invalid login credentials'
+          ? 'Incorrect email or password. Please try again.'
+          : error.message);
+        return;
+      }
+      const returnTo = new URLSearchParams(window.location.search).get('returnTo');
+      window.location.href = returnTo || 'dashboard.html';
+    } catch {
+      showError(errEl, 'Something went wrong. Please check your connection and try again.');
+    } finally {
       btn.textContent = 'Sign In';
       btn.disabled = false;
-      return;
     }
-
-    const returnTo = new URLSearchParams(window.location.search).get('returnTo');
-    window.location.href = returnTo || 'dashboard.html';
   });
 
   // Register
@@ -392,24 +397,29 @@ function initLoginPage() {
     btn.textContent = 'Creating account…';
     btn.disabled = true;
 
-    const { error } = await sb.auth.signUp({
-      email, password,
-      options: { data: { full_name: name } },
-    });
+    try {
+      const { error } = await sb.auth.signUp({
+        email, password,
+        options: { data: { full_name: name } },
+      });
 
-    if (error) {
-      showError(errEl, error.message);
-      btn.textContent = 'Create Account';
-      btn.disabled = false;
-      return;
-    }
+      if (error) {
+        showError(errEl, error.message === 'User already registered'
+          ? 'An account with this email already exists. Try signing in instead.'
+          : error.message);
+        return;
+      }
 
-    // Auto sign-in (works when email confirmation is disabled in Supabase)
-    const { error: signInErr } = await sb.auth.signInWithPassword({ email, password });
-    if (!signInErr) {
-      window.location.href = 'dashboard.html';
-    } else {
-      showError(errEl, 'Account created! Please check your email to confirm, then sign in.');
+      // Auto sign-in (works when email confirmation is disabled in Supabase)
+      const { error: signInErr } = await sb.auth.signInWithPassword({ email, password });
+      if (!signInErr) {
+        window.location.href = 'dashboard.html';
+      } else {
+        showError(errEl, 'Account created! Please check your email to confirm, then sign in.');
+      }
+    } catch {
+      showError(errEl, 'Something went wrong. Please check your connection and try again.');
+    } finally {
       btn.textContent = 'Create Account';
       btn.disabled = false;
     }
